@@ -15,6 +15,13 @@ const TasksList = () => {
         setTask(response.data);
     }
 
+    const onChangeDone = async (task) => {
+        await axios.patch(`https://to-do-list-api-node.herokuapp.com/tasks/${task.id}/done`, {
+          done: !task.done
+        });
+        getTasks();
+    }
+
     return (
         <div>
             <Link to="/add">Add New</Link>
@@ -32,7 +39,9 @@ const TasksList = () => {
                         <tr key={ task.id }>
                             <td>{ task.content }</td>
                             <td>{ task.urgency }</td>
-                            <td><input className="form-check-input" type="checkbox" value="" id={'done_' + task.id} checked={task.done} /></td>
+                            <td>
+                              <input className="form-check-input" type="checkbox" value="" id={'done_' + task.id} checked={task.done} onChange={() => onChangeDone(task)} />
+                            </td>
                             <td>
                                 <Link to={`/edit/${task.id}`}>Edit</Link>
                             </td>
