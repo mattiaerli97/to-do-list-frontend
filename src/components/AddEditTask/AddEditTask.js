@@ -18,7 +18,7 @@ const AddEditTask = ({ isEdit }) => {
         }
       }
       fetchData()
-    });
+    }, [id, isEdit]);
 
     const saveUpdateTask = async(e) => {
       e.preventDefault();
