@@ -9,7 +9,7 @@ const AddEditTask = ({ isEdit }) => {
     const history = useNavigate();
     const { id } = useParams();
 
-    useEffect(() => {
+    useEffect(async () => {
       if (isEdit) {
         const response = await axios.get(`https://to-do-list-api-node.herokuapp.com/tasks/${id}`);
         setContent(response.data.content);
