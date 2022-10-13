@@ -8,6 +8,8 @@ const UrgencyIcon = ({ urgency }) => {
         return <span className="mdi mdi-chevron-double-up"></span>
       case 3:
         return <span className="mdi mdi-chevron-triple-up"></span>
+      default:
+        return urgency
     }
 }
 
