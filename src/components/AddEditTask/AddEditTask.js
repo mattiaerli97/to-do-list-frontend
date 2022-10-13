@@ -10,10 +10,12 @@ const AddEditTask = ({ isEdit }) => {
     const { id } = useParams();
 
     useEffect(async () => {
-      if (isEdit) {
-        const response = await axios.get(`https://to-do-list-api-node.herokuapp.com/tasks/${id}`);
-        setContent(response.data.content);
-        setUrgency(response.data.urgency);
+      async function fetchData() {
+        if (isEdit) {
+          const response = await axios.get(`https://to-do-list-api-node.herokuapp.com/tasks/${id}`);
+          setContent(response.data.content);
+          setUrgency(response.data.urgency);
+        }
       }
     }, []);
 
