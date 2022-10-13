@@ -10,15 +10,15 @@ const AddEditTask = ({ isEdit }) => {
     const { id } = useParams();
 
     useEffect(() => {
-        if (isEdit) {
-          getTaskById();
-        }
+        checkGetTaskById();
     }, []);
 
-    const getTaskById = async () => {
-        const response = await axios.get(`https://to-do-list-api-node.herokuapp.com/tasks/${id}`);
-        setContent(response.data.content);
-        setUrgency(response.data.urgency);
+    const checkGetTaskById = async () => {
+        if (isEdit) {
+          const response = await axios.get(`https://to-do-list-api-node.herokuapp.com/tasks/${id}`);
+          setContent(response.data.content);
+          setUrgency(response.data.urgency);
+        }
     }
 
     const saveUpdateTask = async(e) => {
