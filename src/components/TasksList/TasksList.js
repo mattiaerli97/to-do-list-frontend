@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import axios from "axios";
 import { Link } from "react-router-dom";
 import './TasksList.css';
+import UrgencyIcon from '../UrgencyIcon/UrgencyIcon'
 
 const TasksList = () => {
     const [tasks, setTask] = useState([]);
@@ -23,8 +24,10 @@ const TasksList = () => {
     }
 
     return (
-        <div>
-            <Link to="/add">Add New</Link>
+        <div className="tasks-list">
+            <Link to="/add">
+              <button className="btn btn-primary">Add New</button>
+            </Link>
             <table className="table table-striped">
                 <thead>
                     <tr>
@@ -38,12 +41,12 @@ const TasksList = () => {
                     { tasks.map((task, index) => (
                         <tr key={ task.id }>
                             <td>{ task.content }</td>
-                            <td>{ task.urgency }</td>
+                            <td><UrgencyIcon urgency={ task.urgency } /></td>
                             <td>
                               <input className="form-check-input" type="checkbox" value="" id={'done_' + task.id} checked={task.done} onChange={() => onChangeDone(task)} />
                             </td>
                             <td>
-                                <Link to={`/edit/${task.id}`}>Edit</Link>
+                                <Link to={`/edit/${task.id}`}><button className="btn btn-primary">Edit</button></Link>
                             </td>
                         </tr>
                     )) }
