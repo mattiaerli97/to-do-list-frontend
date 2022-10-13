@@ -36,6 +36,10 @@ const AddEditTask = ({ isEdit }) => {
       history("/");
     }
 
+    const onChangeUrgency = (value) => {
+      setUrgency(value);
+    }
+
     return (
         <div className="add-edit-form">
             <form onSubmit={ saveUpdateTask }>
@@ -51,14 +55,12 @@ const AddEditTask = ({ isEdit }) => {
                 </div>
 
                 <div className="form-group">
-                    <label className="label">Urgency</label>
-                    <input
-                        className="form-control"
-                        type="text"
-                        placeholder="Urgency"
-                        value={ urgency }
-                        onChange={ (e) => setUrgency(e.target.value) }
-                    />
+                  <label className="label">Urgency</label>
+                  <select className="form-control" onChange={e => onChangeUrgency(e.target.value)} value={urgency}>
+                    <option value="1">Low</option>
+                    <option value="2">Medium</option>
+                    <option value="3">High</option>
+                  </select>
                 </div>
 
                 <button type="submit" className="btn btn-primary">{ isEdit ? 'Update' : 'Save'}</button>
