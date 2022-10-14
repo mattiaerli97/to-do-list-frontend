@@ -44,7 +44,7 @@ const TasksList = () => {
         await axios.patch(`https://to-do-list-api-node.herokuapp.com/tasks/${task.id}/done`, {
           done: !task.done
         });
-        getTasks(moreUrgentFirst());
+        onChangeOrderBy(orderBy.toString());
     }
 
     const onChangeHideDone = (value) => {
