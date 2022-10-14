@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import axios from "axios";
 import { Link } from "react-router-dom";
 import './TasksList.css';
@@ -10,23 +10,7 @@ const TasksList = () => {
     const [orderBy, setOrderBy] = useState(window.localStorage.getItem('orderBy') ? window.localStorage.getItem('orderBy') : 1)
     const [hideDone, setHideDone] = useState(false)
 
-    useEffect(() => {
-        onChangeOrderBy(orderBy.toString())
-    }, []);
-
-    const getTasks = async (params) => {
-        const response = await axios.get('https://to-do-list-api-node.herokuapp.com/tasks?' + (params || ''));
-        setTask(response.data);
-    }
-
-    const onChangeDone = async (task) => {
-        await axios.patch(`https://to-do-list-api-node.herokuapp.com/tasks/${task.id}/done`, {
-          done: !task.done
-        });
-        getTasks(moreUrgentFirst());
-    }
-
-    const onChangeOrderBy = (value) => {
+    const onChangeOrderBy = useCallback((value) => {
       setOrderBy(value)
       window.localStorage.setItem('orderBy', value)
       switch (value) {
@@ -45,6 +29,22 @@ const TasksList = () => {
         default:
 
       }
+    }, [])
+
+    useEffect(() => {
+        onChangeOrderBy(orderBy.toString())
+    }, [onChangeOrderBy, orderBy]);
+
+    const getTasks = async (params) => {
+        const response = await axios.get('https://to-do-list-api-node.herokuapp.com/tasks?' + (params || ''));
+        setTask(response.data);
+    }
+
+    const onChangeDone = async (task) => {
+        await axios.patch(`https://to-do-list-api-node.herokuapp.com/tasks/${task.id}/done`, {
+          done: !task.done
+        });
+        getTasks(moreUrgentFirst());
     }
 
     const onChangeHideDone = (value) => {

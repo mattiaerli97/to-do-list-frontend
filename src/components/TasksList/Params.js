@@ -19,7 +19,7 @@ export const toDoFirst = () => {
 }
 
 const getUrlParams = (params) => {
-  if (window.localStorage.getItem('hideDone') == "true") {
+  if (window.localStorage.getItem('hideDone') === "true") {
     params['hideDone'] = "true"
   }
 
