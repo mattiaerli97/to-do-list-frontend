@@ -3,16 +3,19 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 import './TasksList.css';
 import UrgencyIcon from '../UrgencyIcon/UrgencyIcon'
+import { moreUrgentFirst, lessUrgentFirst, doneFirst, toDoFirst } from './Params.js'
 
 const TasksList = () => {
-    const [tasks, setTask] = useState([]);
+    const [tasks, setTask] = useState([])
+    const [orderBy, setOrderBy] = useState(window.localStorage.getItem('orderBy') ? window.localStorage.getItem('orderBy') : 1)
+    const [hideDone, setHideDone] = useState(false)
 
     useEffect(() => {
-        getTasks();
+        onChangeOrderBy(orderBy.toString())
     }, []);
 
-    const getTasks = async () => {
-        const response = await axios.get('https://to-do-list-api-node.herokuapp.com/tasks');
+    const getTasks = async (params) => {
+        const response = await axios.get('https://to-do-list-api-node.herokuapp.com/tasks?' + (params || ''));
         setTask(response.data);
     }
 
@@ -20,14 +23,54 @@ const TasksList = () => {
         await axios.patch(`https://to-do-list-api-node.herokuapp.com/tasks/${task.id}/done`, {
           done: !task.done
         });
-        getTasks();
+        getTasks(moreUrgentFirst());
+    }
+
+    const onChangeOrderBy = (value) => {
+      setOrderBy(value)
+      window.localStorage.setItem('orderBy', value)
+      switch (value) {
+        case "1":
+          getTasks(moreUrgentFirst())
+          break;
+        case "2":
+          getTasks(lessUrgentFirst())
+          break;
+        case "3":
+          getTasks(doneFirst())
+          break;
+        case "4":
+          getTasks(toDoFirst())
+          break;
+        default:
+
+      }
+    }
+
+    const onChangeHideDone = (value) => {
+      setHideDone(value)
+      window.localStorage.setItem('hideDone', value)
+      onChangeOrderBy(orderBy.toString())
     }
 
     return (
         <div className="tasks-list">
-            <Link to="/add">
-              <button className="btn btn-primary">Add New</button>
-            </Link>
+            <div className="list-header">
+              <Link to="/add">
+                <button className="btn btn-primary">Add New</button>
+              </Link>
+              <div className="filters">
+                <span>Order by</span>
+                <select className="form-control" onChange={e => onChangeOrderBy(e.target.value)} value={orderBy}>
+                  <option value="1">More urgent first</option>
+                  <option value="2">Less urgent first</option>
+                  <option value="3">Done first</option>
+                  <option value="4">To do first</option>
+                </select>
+                <span>Hide done</span>
+                <input className="form-check-input" type="checkbox" value="" id="hide_done" checked={hideDone} onChange={(e) => onChangeHideDone(e.target.checked)} />
+              </div>
+            </div>
             <table className="table table-striped">
                 <thead>
                     <tr>

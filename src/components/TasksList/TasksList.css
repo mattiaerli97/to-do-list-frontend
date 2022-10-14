@@ -6,3 +6,26 @@ input[type='checkbox'] {
 .tasks-list {
   padding: 30px;
 }
+
+.list-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.list-header > .filters {
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  width: 25%;
+  align-content: flex-end;
+}
+
+.list-header > .filters > input[type='checkbox'] {
+  margin-right: 30px;
+}
+
+.filters > .form-control {
+  margin-left: 16px;
+  margin-right: 16px;
+}
