@@ -7,6 +7,7 @@ import { moreUrgentFirst, lessUrgentFirst, doneFirst, toDoFirst } from './Params
 
 const TasksList = () => {
     const [tasks, setTask] = useState([])
+    const [loading, setLoading] = useState(false)
     const [orderBy, setOrderBy] = useState(window.localStorage.getItem('orderBy') ? window.localStorage.getItem('orderBy') : 1)
     const [hideDone, setHideDone] = useState(window.localStorage.getItem('hideDone') && window.localStorage.getItem('hideDone') === "true" ? true : false)
 
@@ -36,7 +37,9 @@ const TasksList = () => {
     }, [onChangeOrderBy, orderBy]);
 
     const getTasks = async (params) => {
+        setLoading(true)
         const response = await axios.get('https://to-do-list-api-node.herokuapp.com/tasks?' + (params || ''));
+        setLoading(false)
         setTask(response.data);
     }
 
@@ -71,7 +74,7 @@ const TasksList = () => {
                 <input className="form-check-input" type="checkbox" value="" id="hide_done" checked={hideDone} onChange={(e) => onChangeHideDone(e.target.checked)} />
               </div>
             </div>
-            <table className="table table-striped">
+            { !loading && <table className="table table-striped">
                 <thead>
                     <tr>
                         <th>Content</th>
@@ -99,7 +102,10 @@ const TasksList = () => {
                     )) }
 
                 </tbody>
-            </table>
+            </table> }
+            {
+              loading && <div className="loader">Loading</div>
+            }
         </div>
     )
 }
