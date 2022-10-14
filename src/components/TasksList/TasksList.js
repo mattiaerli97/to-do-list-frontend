@@ -8,7 +8,7 @@ import { moreUrgentFirst, lessUrgentFirst, doneFirst, toDoFirst } from './Params
 const TasksList = () => {
     const [tasks, setTask] = useState([])
     const [orderBy, setOrderBy] = useState(window.localStorage.getItem('orderBy') ? window.localStorage.getItem('orderBy') : 1)
-    const [hideDone, setHideDone] = useState(false)
+    const [hideDone, setHideDone] = useState(window.localStorage.getItem('hideDone') && window.localStorage.getItem('hideDone') === "true" ? true : false)
 
     const onChangeOrderBy = useCallback((value) => {
       setOrderBy(value)
@@ -83,13 +83,17 @@ const TasksList = () => {
                 <tbody>
                     { tasks.map((task, index) => (
                         <tr key={ task.id }>
-                            <td>{ task.content }</td>
-                            <td><UrgencyIcon urgency={ task.urgency } /></td>
                             <td>
-                              <input className="form-check-input" type="checkbox" value="" id={'done_' + task.id} checked={task.done} onChange={() => onChangeDone(task)} />
+                              <div className="cell">{ task.content }</div>
                             </td>
                             <td>
-                                <Link to={`/edit/${task.id}`}><button className="btn btn-primary">Edit</button></Link>
+                              <div className="cell"><UrgencyIcon urgency={ task.urgency } /></div>
+                            </td>
+                            <td>
+                              <div className="cell"><input className="form-check-input" type="checkbox" value="" id={'done_' + task.id} checked={task.done} onChange={() => onChangeDone(task)} /></div>
+                            </td>
+                            <td>
+                              <div className="cell"><Link to={`/edit/${task.id}`}><button className="btn btn-primary">Edit</button></Link></div>
                             </td>
                         </tr>
                     )) }
